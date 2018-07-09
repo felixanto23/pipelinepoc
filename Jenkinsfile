@@ -1,5 +1,9 @@
 pipeline {
-    
+	
+    def server = Artifactory.server('10.200.152.50')
+    server username = 'admin'
+    server password = 'admin'
+	
     agent { label '10.200.152.50' }
     stages {
                    
@@ -15,6 +19,7 @@ pipeline {
                sh '/usr/local/apache-maven/bin/mvn clean package'
                 junit '**/target/surefire-reports/TEST-*.xml'
                                 archiveArtifacts artifacts: '**/target/*.war', fingerprint: true
+		     artifactoryUpload(**/target/*.war)
             }
         }
         stage('Docker Build') {
