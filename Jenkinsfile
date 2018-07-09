@@ -15,7 +15,7 @@ pipeline {
                sh '/usr/local/apache-maven/bin/mvn clean package'
                 junit '**/target/surefire-reports/TEST-*.xml'
                                 archiveArtifacts artifacts: '**/target/*.war', fingerprint: true
-		curl -u admin:admin -X PUT "http://10.200.152.50:8081/artifactory/build-artifacts/maven-sample/" -T **/target/*.war
+		curl -u admin:admin -X PUT "http://10.200.152.50:8081/artifactory/build-artifacts/maven-sample/" -T "**/target/*.war"
             }
         }
         stage('Docker Build') {
