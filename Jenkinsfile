@@ -1,9 +1,5 @@
 pipeline {
 	
-    def server = Artifactory.server('10.200.152.50')
-    server username = 'admin'
-    server password = 'admin'
-	
     agent { label '10.200.152.50' }
     stages {
                    
@@ -12,14 +8,14 @@ pipeline {
             git 'https://github.com/dilipsun/addressbook.git'
           }
         }
-        stage('Build') {
+        stage('Build and Upload') {
             
              steps {
                
                sh '/usr/local/apache-maven/bin/mvn clean package'
                 junit '**/target/surefire-reports/TEST-*.xml'
                                 archiveArtifacts artifacts: '**/target/*.war', fingerprint: true
-		     artifactoryUpload{**/target/*.war}
+		curl -u admin:admin -X PUT "http://10.200.152.50:8081/artifactory/build-artifacts/maven-sample/" -T **/target/*.war
             }
         }
         stage('Docker Build') {
