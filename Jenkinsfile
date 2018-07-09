@@ -19,7 +19,7 @@ pipeline {
                sh '/usr/local/apache-maven/bin/mvn clean package'
                 junit '**/target/surefire-reports/TEST-*.xml'
                                 archiveArtifacts artifacts: '**/target/*.war', fingerprint: true
-		     artifactoryUpload(**/target/*.war)
+		     artifactoryUpload{**/target/*.war}
             }
         }
         stage('Docker Build') {
