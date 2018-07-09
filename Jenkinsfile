@@ -1,6 +1,6 @@
 pipeline {
     
-    agent { label 'slave' }
+    agent { label '10.200.152.50' }
     stages {
                    
         stage ('Checkout') {
@@ -12,7 +12,7 @@ pipeline {
             
              steps {
                
-               sh '/opt/apache-maven-3.5.4/bin/mvn clean package'
+               sh '/usr/local/apache-maven/bin/mvn clean package'
                 junit '**/target/surefire-reports/TEST-*.xml'
                                 archiveArtifacts artifacts: '**/target/*.war', fingerprint: true
             }
@@ -21,17 +21,21 @@ pipeline {
         
             steps {
                 
-                sh 'docker build -t dilipsun/addressbook$(git rev-parse HEAD):latest .'
+                sh 'docker build -t maven-sample:latest .'
             }
-        }
-      }
-    }
+		}
+        stage('Docker Push') {
+			steps {
+				sh "docker login -u admin -p admin 10.200.152.50:8081"
+				sh "docker tag maven-sample 10.200.152.50:8081/docker-repo/maven-sample:1.0"
+				sh "docker push 10.200.152.50:8081/docker-repo/maven-sample:1.0"
+			}
+		}
+    
         stage('Docker Deploy') {
-      steps {
-          sh 'docker run -itd -P dilipsun/addressbook$(git rev-parse HEAD):latest'
-        }
-      }
-    
-    }
-    
+			steps {
+				sh 'docker run -itd -P dilipsun/addressbook$(git rev-parse HEAD):latest'
+			}
+		}
+	}
 }
