@@ -1,6 +1,6 @@
 pipeline {
 	
-    agent { label '10.200.152.50 && 10.200.152.58' }
+    agent { label 'slave50 && slave58' }
     stages {
                    
         stage ('Checkout Dockerfile') {
