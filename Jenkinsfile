@@ -1,6 +1,6 @@
 pipeline {
 	
-    agent { label '$slavenode' }
+	agent { label '${slavenode}' }
     stages {
                    
         stage ('Checkout Dockerfile') {
