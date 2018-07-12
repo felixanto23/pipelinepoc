@@ -3,7 +3,7 @@ pipeline {
 	parameters {
         choice(choices: '10.200.152.50\n10.200.152.58', description: 'Choose the node!', name: 'slavenode')
     }
-	agent { label '${params.slavenode}' }
+	agent { label "${params.slavenode}" }
     stages {
                    
         stage ('Checkout Dockerfile') {
